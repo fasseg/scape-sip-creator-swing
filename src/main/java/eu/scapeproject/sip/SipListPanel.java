@@ -35,23 +35,23 @@ public class SipListPanel extends JPanel {
         c.gridx = 0;
         this.add(new JScrollPane(sipTable), c);
         c.fill = GridBagConstraints.NONE;
-        c.weightx= 0.1f;
+        c.weightx = 0.1f;
         c.gridx = 1;
         c.gridy = 0;
-        this.add(new ButtonPanel(),c);
+        this.add(new ButtonPanel(), c);
     }
-    
+
     public void addNewSIP() {
         main.showAddSip(null);
     }
-    
-    private class ButtonPanel extends JPanel{
+
+    private class ButtonPanel extends JPanel {
+        private static final long serialVersionUID = 1L;
+
         private JButton addSipButton = new JButton("Add");
         private JButton deleteSipButton = new JButton("Delete");
         private JButton editSipButton = new JButton("Edit");
-        
-        
-        
+
         public ButtonPanel() {
             this.setLayout(new GridBagLayout());
             GridBagConstraints c = new GridBagConstraints();
@@ -61,13 +61,13 @@ public class SipListPanel extends JPanel {
             c.weighty = 1;
             c.gridy = 0;
             c.gridx = 0;
-            this.add(addSipButton,c);
+            this.add(addSipButton, c);
             c.gridy = 1;
             c.gridx = 0;
-            this.add(deleteSipButton,c);
+            this.add(deleteSipButton, c);
             c.gridy = 2;
             c.gridx = 0;
-            this.add(editSipButton,c);
+            this.add(editSipButton, c);
             this.addSipButton.addActionListener(new ActionListener() {
                 public void actionPerformed(ActionEvent e) {
                     addNewSIP();
@@ -77,6 +77,7 @@ public class SipListPanel extends JPanel {
     }
 
     private class SipListModel extends AbstractTableModel {
+        private static final long serialVersionUID = 1L;
 
         private List<SIP> sips;
 

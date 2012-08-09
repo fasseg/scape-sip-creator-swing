@@ -11,10 +11,12 @@ import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
 public class EditSIPPanel extends JPanel {
-    JTextField title = new JTextField();
-    JTextArea desc = new JTextArea();
-    JButton cancel  = new JButton("Cancel");
-    JButton ok = new JButton("Ok");
+    private static final long serialVersionUID = 1L;
+    
+    private JTextField title = new JTextField();
+    private JTextArea desc = new JTextArea();
+    private JButton cancel  = new JButton("Cancel");
+    private JButton ok = new JButton("Ok");
 
     public EditSIPPanel(SIP sip) {
         if (sip != null) {
