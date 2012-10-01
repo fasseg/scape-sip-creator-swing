@@ -1,27 +1,32 @@
 package eu.scapeproject.sip;
 
-import java.net.URI;
+import java.util.ArrayList;
+import java.util.List;
+
+import eu.scapeproject.model.IntellectualEntity;
 
 public class SIP {
     private String title;
-    private String desc;
-    private URI location;
-    private long size;
-
-    public URI getLocation() {
-        return location;
-    }
-
-    public long getSize() {
-        return size;
-    }
+    private final List<IntellectualEntity> entities = new ArrayList<IntellectualEntity>();
 
     public String getTitle() {
         return title;
     }
 
-    public String getDesc() {
-        return desc;
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public List<IntellectualEntity> getEntities() {
+        return entities;
+    }
+
+    public void addEntities(List<IntellectualEntity> entities) {
+        this.entities.addAll(entities);
+    }
+
+    public void addEntity(IntellectualEntity entity) {
+        this.entities.add(entity);
     }
 
 }
