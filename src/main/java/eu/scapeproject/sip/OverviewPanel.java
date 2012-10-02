@@ -1,5 +1,6 @@
 package eu.scapeproject.sip;
 
+import java.awt.BorderLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.util.Map;
@@ -37,6 +38,7 @@ public class OverviewPanel extends JPanel {
         // sipTree.setRootVisible(false);
         sipTree.addTreeSelectionListener(new SipTreeSelectionListener(sipTree));
         dataPanel = new JPanel();
+        dataPanel.setLayout(new GridBagLayout());
         this.setLayout(new GridBagLayout());
         GridBagConstraints c = new GridBagConstraints();
         c.anchor = GridBagConstraints.NORTHEAST;
@@ -59,6 +61,11 @@ public class OverviewPanel extends JPanel {
         LOG.debug("displaying " + sips.size() + " SIPs");
     }
 
+    public void hideDetails(){
+        dataPanel.removeAll();
+        dataPanel.repaint();
+    }
+    
     private void expandRootNode() {
         sipTree.expandPath(new TreePath(rootNode.getPath()));
     }
@@ -66,8 +73,15 @@ public class OverviewPanel extends JPanel {
     public void editEntity(IntellectualEntity obj) {
         LOG.debug("editing Intellectual entity");
         this.dataPanel.removeAll();
-        this.dataPanel.add(new EditEntityPanel(obj));
-        this.dataPanel.invalidate();
+        GridBagConstraints c = new GridBagConstraints();
+        c.gridx=0;
+        c.gridy=0;
+        c.weightx = 1f;
+        c.weighty = 1f;
+        c.fill = GridBagConstraints.HORIZONTAL;
+        c.anchor = GridBagConstraints.NORTHWEST;
+        this.dataPanel.add(new EditEntityPanel(this,obj),c);
+        this.repaint();
     }
 
     private class SipTreeModel extends DefaultTreeModel {
@@ -90,8 +104,6 @@ public class OverviewPanel extends JPanel {
                 SipTreeNode entitiesNode = new SipTreeNode("Intellectual Entities");
                 for (IntellectualEntity entity : s.getEntities()) {
                     SipTreeNode entityNode = new SipTreeNode(entity);
-                    SipTreeNode descMDNode = new SipTreeNode("Descriptive MD");
-                    entityNode.add(descMDNode);
                     if (entity.getRepresentations() != null) {
                         SipTreeNode repsNode = new SipTreeNode("Representations");
                         for (Representation rep : entity.getRepresentations()) {
