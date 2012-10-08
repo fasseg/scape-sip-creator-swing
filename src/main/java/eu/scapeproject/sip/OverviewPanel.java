@@ -1,10 +1,14 @@
 package eu.scapeproject.sip;
 
+import java.awt.BorderLayout;
+import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.util.Map;
 
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JSplitPane;
 import javax.swing.JTree;
 import javax.swing.event.TreeSelectionEvent;
 import javax.swing.event.TreeSelectionListener;
@@ -15,14 +19,16 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class OverviewPanel extends JPanel {
+
+	private final JSplitPane splitPane = new JSplitPane();
+	private final JScrollPane scrollPane = new JScrollPane();
 	private final JTree sipTree;
 	private final DefaultMutableTreeNode rootNode;
 	private final SipTreeModel treeModel;
-	private JPanel dataPanel;
 
 	private static final Logger LOG = LoggerFactory.getLogger(OverviewPanel.class);
 
-	OverviewPanel(Map<String, SIP> sips) {
+	OverviewPanel(Map<String, SIP> sips, int dividerLocation) {
 		rootNode = new DefaultMutableTreeNode();
 		treeModel = new SipTreeModel(sips, rootNode);
 		sipTree = new JTree(treeModel);
@@ -30,21 +36,18 @@ public class OverviewPanel extends JPanel {
 		sipTree.setRowHeight(24);
 		// sipTree.setRootVisible(false);
 		sipTree.addTreeSelectionListener(new SipTreeSelectionListener(sipTree));
-		dataPanel = new JPanel();
-		dataPanel.setLayout(new GridBagLayout());
-		this.setLayout(new GridBagLayout());
-		GridBagConstraints c = new GridBagConstraints();
-		c.anchor = GridBagConstraints.NORTHEAST;
-		c.fill = GridBagConstraints.BOTH;
-		c.gridx = 0;
-		c.gridy = 0;
-		c.weightx = 0.25f;
-		c.weighty = 1f;
-		this.add(sipTree, c);
-		c.gridx = 1;
-		c.weightx = 0.75f;
-		this.add(dataPanel, c);
+		JPanel rightPanel = new JPanel();
+		splitPane.setLeftComponent(new JScrollPane(sipTree));
+		scrollPane.add(rightPanel);
+		splitPane.setRightComponent(scrollPane);
+		splitPane.setDividerLocation(dividerLocation);
+		this.setLayout(new BorderLayout());
+		this.add(splitPane, BorderLayout.CENTER);
+	}
 
+	void showSipDetails(SIP s) {
+		this.scrollPane.setViewportView(new SipPanel(s));
+		LOG.debug("showing details of SIP " + s.getTitle());
 	}
 
 	public void setSips(Map<String, SIP> sips) {
@@ -52,11 +55,6 @@ public class OverviewPanel extends JPanel {
 		expandRootNode();
 		treeModel.reload();
 		LOG.debug("displaying " + sips.size() + " SIPs");
-	}
-
-	public void hideDetails() {
-		dataPanel.removeAll();
-		dataPanel.repaint();
 	}
 
 	private void expandRootNode() {
@@ -73,6 +71,10 @@ public class OverviewPanel extends JPanel {
 
 		@Override
 		public void valueChanged(TreeSelectionEvent e) {
+			SipTreeNode node = (SipTreeNode) e.getPath().getLastPathComponent();
+			if (node.getUserObject() instanceof SIP) {
+				showSipDetails((SIP) node.getUserObject());
+			}
 		}
 
 	}

@@ -1,5 +1,6 @@
 package eu.scapeproject.sip;
 
+import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.WindowEvent;
 import java.util.Arrays;
@@ -12,7 +13,10 @@ import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
+import javax.swing.JSplitPane;
 import javax.swing.SwingUtilities;
+import javax.swing.UIManager;
+import javax.swing.UnsupportedLookAndFeelException;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -24,11 +28,30 @@ import eu.scapeproject.model.Representation;
 
 @SuppressWarnings("serial")
 public class SipCreatorMain extends JFrame {
+	
+	private static final Logger LOG = LoggerFactory.getLogger(SipCreatorMain.class);
+	
     private JMenuBar mainMenu;
     private OverviewPanel overview;
+
     private Map<String, SIP> sips = new HashMap<String, SIP>();
 
-    private static final Logger LOG = LoggerFactory.getLogger(SipCreatorMain.class);
+
+    public static void main(String[] args) {
+    	SwingUtilities.invokeLater(new Runnable() {
+    		
+    		public void run() {
+    			try {
+					UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+    			UIManager.put("TextArea.margin", new Insets(4,4,4,4));
+    			SipCreatorMain sipCreator = new SipCreatorMain();
+    			sipCreator.setVisible(true);
+    		}
+    	});
+    }
 
     private Action closeAction = new AbstractAction("Exit", null) {
 
@@ -61,26 +84,6 @@ public class SipCreatorMain extends JFrame {
         }
     };
 
-    private void close() {
-        this.dispatchEvent(new WindowEvent(this, WindowEvent.WINDOW_CLOSING));
-    }
-
-    protected String getNextUntitledName() {
-        String prefix = "Untitled ";
-        int idx = 1;
-        while (sips.containsKey(prefix + idx)) {
-            idx++;
-        }
-        return prefix + idx;
-    }
-
-    protected void updateTree() {
-        overview.setSips(sips);
-    }
-
-    protected void setCurrentSip(SIP sip) {
-    }
-
     public SipCreatorMain() {
         this.setSize(1024, 800);
         this.setTitle("SCAPE SIP Creation Utility v0.0.1");
@@ -92,11 +95,8 @@ public class SipCreatorMain extends JFrame {
 
     }
 
-    private void showOverView() {
-        if (overview == null) {
-            overview = new OverviewPanel(sips);
-        }
-        this.setContentPane(overview);
+    private void close() {
+        this.dispatchEvent(new WindowEvent(this, WindowEvent.WINDOW_CLOSING));
     }
 
     private JMenuBar createMenu() {
@@ -112,13 +112,26 @@ public class SipCreatorMain extends JFrame {
 
     }
 
-    public static void main(String[] args) {
-        SwingUtilities.invokeLater(new Runnable() {
+    protected String getNextUntitledName() {
+        String prefix = "Untitled ";
+        int idx = 1;
+        while (sips.containsKey(prefix + idx)) {
+            idx++;
+        }
+        return prefix + idx;
+    }
 
-            public void run() {
-                SipCreatorMain sipCreator = new SipCreatorMain();
-                sipCreator.setVisible(true);
-            }
-        });
+    protected void setCurrentSip(SIP sip) {
+    }
+
+    private void showOverView() {
+        if (overview == null) {
+            overview = new OverviewPanel(sips,this.getWidth() / 3);
+        }
+        this.setContentPane(overview);
+    }
+
+    protected void updateTree() {
+        overview.setSips(sips);
     }
 }

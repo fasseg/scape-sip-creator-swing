@@ -60,7 +60,7 @@ public final class IconFactory {
 		return representationsIcon;
 	}
 
-	public ImageIcon getDcIcon() {
+	public ImageIcon getMDIcon() {
 		return dcIcon;
 	}
 

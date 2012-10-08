@@ -40,10 +40,10 @@ class SipTreeModel extends DefaultTreeModel {
 					SipTreeNode repsNode = new SipTreeNode("Representations",IconFactory.getInstance().getRepresentationsIcon());
 					for (Representation rep : entity.getRepresentations()) {
 						SipTreeNode repNode = new SipTreeNode(rep);
-						SipTreeNode technMDNode = new SipTreeNode("Technical MD");
-						SipTreeNode rightsMDNode = new SipTreeNode("Rights MD");
-						SipTreeNode sourceMDNode = new SipTreeNode("Source MD");
-						SipTreeNode provMDNode = new SipTreeNode("Digital Provenance MD");
+						SipTreeNode technMDNode = new SipTreeNode("Technical MD",IconFactory.getInstance().getMDIcon());
+						SipTreeNode rightsMDNode = new SipTreeNode("Rights MD",IconFactory.getInstance().getMDIcon());
+						SipTreeNode sourceMDNode = new SipTreeNode("Source MD",IconFactory.getInstance().getMDIcon());
+						SipTreeNode provMDNode = new SipTreeNode("Digital Provenance MD",IconFactory.getInstance().getMDIcon());
 						repNode.add(technMDNode);
 						repNode.add(rightsMDNode);
 						repNode.add(sourceMDNode);
@@ -60,7 +60,7 @@ class SipTreeModel extends DefaultTreeModel {
 	}
 
 	private void addDcNodes(SipTreeNode parent, DCMetadata dc) {
-		SipTreeNode dcNode = new SipTreeNode("Descriptive Metadata",IconFactory.getInstance().getDcIcon());
+		SipTreeNode dcNode = new SipTreeNode("Descriptive Metadata",IconFactory.getInstance().getMDIcon());
 		SipTreeNode dcContributorsNode = new SipTreeNode("Titles", dc.getTitle());
 		SipTreeNode dcCoveragesNode = new SipTreeNode("Coverages", dc.getTitle());
 		SipTreeNode dcCreatorsNode = new SipTreeNode("Contributors", dc.getTitle());
