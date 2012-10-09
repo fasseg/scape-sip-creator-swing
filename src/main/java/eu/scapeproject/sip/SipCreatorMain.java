@@ -60,6 +60,15 @@ public class SipCreatorMain extends JFrame {
         }
     };
 
+    private Action saveSipsAction = new AbstractAction("Save...",null) {
+        
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            SIP sip = sips.entrySet().iterator().next().getValue();
+            new SipStoreWorker(sip, "test.zip").execute();
+        }
+    };
+    
     private Action newSipAction = new AbstractAction("New SIP", null) {
 
         public void actionPerformed(ActionEvent e) {
@@ -104,6 +113,8 @@ public class SipCreatorMain extends JFrame {
         JMenu fileMenu = new JMenu("File");
         JMenuItem newSIP = new JMenuItem(newSipAction);
         fileMenu.add(newSIP);
+        JMenuItem saveSIP = new JMenuItem(saveSipsAction);
+        fileMenu.add(saveSIP);
         fileMenu.addSeparator();
         JMenuItem exitItem = new JMenuItem(closeAction);
         fileMenu.add(exitItem);
